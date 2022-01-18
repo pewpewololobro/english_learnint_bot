@@ -70,12 +70,12 @@ async def callback(call):
 			)
 
 			if wt.translate.id == msg["a"]:
-				await bot.send_message(call.message.chat.id, "Правильный ответ ", reply_markup = markup)
+				await bot.send_message(call.message.chat.id, "Правильный ответ!", reply_markup = markup)
 			else:
 				translate = Translate.get(Translate.id == wt.translate_id)
 				await bot.send_message(
 					call.message.chat.id,
-					"Ошибка! Правильный ответ {translate.translate}",
+					f"Ошибка! Правильный ответ {translate.translate}",
 					reply_markup = markup
 				)
 		if msg["t"] == "m":
