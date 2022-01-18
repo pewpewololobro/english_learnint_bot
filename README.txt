@@ -1,0 +1,1 @@
+First run the model file to create the database, then run the server file
