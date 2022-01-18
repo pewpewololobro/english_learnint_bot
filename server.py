@@ -50,5 +50,36 @@ async def get_test(message : types.Message, user = None):
 	markup.add(*buttons[2:])
 	await bot.send_message(user.chat_id, f"Слово {question.word}", reply_markup = markup)
 
+@dp.callback_query_handler(lambda call : True)
+async def callback(call):
+	user = User.get(User.external_id == call.from_user.id)
+	if call.message:
+		msg = json.loads(call.data)
+		if msg["t"] == "a":
+			markup = types.InlineKeyboardMarkup()
+			btn = types.InlineKeyboardButton(
+				text = 'Еще?',
+				callback_data = json.dumps(
+					{'t' : 'm'}
+				)
+			)
+			markup.add(btn)
+
+			wt : WordTranslate = WordTranslate.get(
+				WordTranslate.word_id == msg["q"], WordTranslate.user == user
+			)
+
+			if wt.translate.id == msg["a"]:
+				await bot.send_message(call.message.chat.id, "Правильный ответ ", reply_markup = markup)
+			else:
+				translate = Translate.get(Translate.id == wt.translate_id)
+				bot.send_message(
+					call.message.chat.id,
+					"Ошибка! Правильный ответ {translate.translate}",
+					reply_markup = markup
+				)
+		if msg["t"] == "m":
+			get_test(call.message, user)
+
 if __name__ == "__main__":
 	executor.start_polling(dp, skip_updates=True)
