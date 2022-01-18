@@ -1,9 +1,10 @@
 from aiogram import Bot, types, Dispatcher
+from aiogram.utils import executor
 import os
 
 
 bot = Bot(token=os.getenv('TOKEN'))
-dp = Dispatcher(bot, storage=storage)
+dp = Dispatcher(bot)
 
 async def on_startup(_):
 	print('Bot started')
