@@ -73,13 +73,13 @@ async def callback(call):
 				await bot.send_message(call.message.chat.id, "Правильный ответ ", reply_markup = markup)
 			else:
 				translate = Translate.get(Translate.id == wt.translate_id)
-				bot.send_message(
+				await bot.send_message(
 					call.message.chat.id,
 					"Ошибка! Правильный ответ {translate.translate}",
 					reply_markup = markup
 				)
 		if msg["t"] == "m":
-			get_test(call.message, user)
+			await get_test(call.message, user)
 
 if __name__ == "__main__":
 	executor.start_polling(dp, skip_updates=True)
